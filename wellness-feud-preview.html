@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>The Wellness Feud</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<style>
+  :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+  body{margin:0;background:#fdfaf3;color:#0f172a;font-family:'Sora',system-ui,sans-serif;}
+  .font-head{font-family:'Quicksand',system-ui,sans-serif;}
+  .glow-title{font-family:'Quicksand',sans-serif;color:#065f46;text-shadow:0 0 16px rgba(16,185,129,.5),0 0 34px rgba(16,185,129,.3);}
+  .glass{background:rgba(255,255,255,.82);backdrop-filter:blur(14px);}
+  .blob{position:fixed;border-radius:9999px;filter:blur(70px);pointer-events:none;z-index:-10;}
+  .flip-card{perspective:1200px;}
+  .flip-inner{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.34,1.56,.64,1);transform-style:preserve-3d;}
+  .flip-inner.flipped{transform:rotateX(180deg);}
+  .flip-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+  .flip-back{transform:rotateX(180deg);}
+  .enter{animation:fadeUp .5s ease-out both;}
+  @keyframes fadeUp{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:translateY(0)}}
+  .pop{animation:pop .35s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+  .float{animation:floaty 2.6s ease-in-out infinite;}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  .fadeIn{animation:fadeIn .25s ease-out;}
+  @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+  @keyframes confetti{0%{transform:translate(0,0) rotate(0deg);opacity:1}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:0}}
+  .confetti-piece{position:fixed;width:7px;height:7px;border-radius:2px;animation:confetti .9s ease-out forwards;pointer-events:none;z-index:60;}
+  @keyframes fall{0%{transform:translateY(-10vh) rotate(0deg);opacity:1}90%{opacity:1}100%{transform:translateY(110vh) rotate(var(--rot));opacity:0}}
+  .confetti-fall{position:fixed;top:0;width:9px;height:15px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:55;}
+  .mesh-grid{position:fixed;inset:0;z-index:-14;opacity:.5;background-image:linear-gradient(rgba(16,185,129,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,178,.06) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 40%,transparent 85%);mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 40%,transparent 85%);}
+  .spotlight{position:fixed;top:-10%;left:50%;transform:translateX(-50%);width:70vw;height:60vh;border-radius:9999px;background:radial-gradient(circle,rgba(255,255,255,.9) 0%,rgba(209,250,229,.4) 45%,transparent 72%);filter:blur(30px);z-index:-13;pointer-events:none;}
+  .glow-a{text-shadow:0 0 14px rgba(16,185,129,.45);}
+  .glow-b{text-shadow:0 0 14px rgba(14,165,233,.45);}
+  .ring-a{box-shadow:0 0 0 1px rgba(16,185,129,.25),0 0 24px rgba(16,185,129,.22);}
+  .ring-b{box-shadow:0 0 0 1px rgba(14,165,233,.25),0 0 24px rgba(14,165,233,.22);}
+  .pod{background-image:radial-gradient(rgba(15,23,42,.035) 1px,transparent 1px);background-size:10px 10px;}
+  .grad-text{background:linear-gradient(90deg,#0f172a,#047857 55%,#0284c7);-webkit-background-clip:text;background-clip:text;color:transparent;}
+</style>
+</head><body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+const {useState,useEffect,useRef}=React;
+const Icon=({path,size=18,className="",strokeWidth=2})=>(
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className}>{path}</svg>
+);
+const Plus=p=><Icon {...p} path={<><path d="M12 5v14"/><path d="M5 12h14"/></>}/>;
+const Minus=p=><Icon {...p} path={<path d="M5 12h14"/>}/>;
+const EyeI=p=><Icon {...p} path={<><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></>}/>;
+const Trophy=p=><Icon {...p} path={<><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a3 3 0 0 0 3 5"/><path d="M17 5h3a3 3 0 0 1-3 5"/></>}/>;
+const Sparkles=p=><Icon {...p} path={<path d="M12 3v4M3 12h4m10 0h4M12 17v4M5.6 5.6l2.8 2.8m8-2.8-2.8 2.8m-8 8 2.8-2.8m8 2.8-2.8-2.8"/>}/>;
+const ChR=p=><Icon {...p} path={<path d="m9 18 6-6-6-6"/>}/>;
+const ChL=p=><Icon {...p} path={<path d="m15 18-6-6 6-6"/>}/>;
+const X=p=><Icon {...p} path={<><path d="M18 6 6 18"/><path d="m6 6 12 12"/></>}/>;
+const Users=p=><Icon {...p} path={<><circle cx="9" cy="8" r="3"/><path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/><circle cx="17" cy="9" r="2.5"/><path d="M22 20c0-2.6-2.1-4.8-5-5.5"/></>}/>;
+const Crown=p=><Icon {...p} path={<><path d="m2 18 2-9 4 4 4-7 4 7 4-4 2 9Z"/><path d="M4 21h16"/></>}/>;
+const Bulb=p=><Icon {...p} path={<><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a6 6 0 0 0-4 10.5c.7.6 1 1.4 1 2.5h6c0-1.1.3-1.9 1-2.5A6 6 0 0 0 12 2Z"/></>}/>;
+const Undo=p=><Icon {...p} path={<><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></>}/>;
+const ChevDown=p=><Icon {...p} path={<path d="m6 9 6 6 6-6"/>}/>;
+const Leaf=p=><Icon {...p} path={<path d="M11 20A7 7 0 0 1 4 13c0-4 7-11 7-11s7 7 7 11a7 7 0 0 1-7 7z"/>}/>;
+const Heart=p=><Icon {...p} path={<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/>}/>;
+const Droplet=p=><Icon {...p} path={<path d="M12 2s7 8 7 13a7 7 0 1 1-14 0c0-5 7-13 7-13Z"/>}/>;
+
+function FloralBg(){
+  const blobs=[
+    ["-6rem","-6rem","22rem","22rem","rgba(167,243,208,.55)"],
+    ["auto","-8rem","24rem","24rem","rgba(191,219,254,.5)","right:-6rem;"],
+    ["auto","auto","20rem","20rem","rgba(253,230,138,.4)"],
+  ];
+  return (
+    <>
+      <div className="spotlight"/>
+      <div className="mesh-grid"/>
+      <div className="blob" style={{top:"-6rem",left:"-6rem",width:"22rem",height:"22rem",background:"rgba(167,243,208,.55)"}}/>
+      <div className="blob" style={{top:"-8rem",right:"-6rem",width:"24rem",height:"24rem",background:"rgba(191,219,254,.5)"}}/>
+      <div className="blob" style={{bottom:"-8rem",left:"10%",width:"20rem",height:"20rem",background:"rgba(253,230,138,.35)"}}/>
+      <div className="blob" style={{bottom:"-6rem",right:"5%",width:"18rem",height:"18rem",background:"rgba(244,114,182,.3)"}}/>
+      <div className="blob" style={{top:"35%",left:"45%",width:"16rem",height:"16rem",background:"rgba(94,234,212,.28)"}}/>
+      <svg className="fixed inset-0 w-full h-full -z-20 opacity-[0.07]" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <pattern id="fl" width="200" height="200" patternUnits="userSpaceOnUse">
+            {[0,1,2,3].map(i=>{
+              const cx=(i%2)*100+40, cy=Math.floor(i/2)*100+40;
+              return (
+                <g key={i} transform={`translate(${cx},${cy})`}>
+                  {[0,72,144,216,288].map(a=>(
+                    <ellipse key={a} cx="0" cy="-10" rx="7" ry="12" fill="#166534" transform={`rotate(${a})`}/>
+                  ))}
+                </g>
+              );
+            })}
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#fl)"/>
+      </svg>
+    </>
+  );
+}
+
+function useConfetti(){
+  const [pieces,setPieces]=useState([]);
+  const burst=(x,y)=>{
+    const n=14, newPieces=Array.from({length:n},(_,i)=>{
+      const angle=Math.random()*Math.PI*2, dist=60+Math.random()*90;
+      return {id:Date.now()+i, x, y,
+        dx:Math.cos(angle)*dist, dy:Math.sin(angle)*dist-40,
+        rot:(Math.random()*360)+"deg",
+        color:["#6ee7b7","#93c5fd","#fcd34d","#f9a8d4"][i%4]};
+    });
+    setPieces(p=>[...p,...newPieces]);
+    setTimeout(()=>setPieces(p=>p.filter(pc=>!newPieces.includes(pc))),900);
+  };
+  const layer=(<>{pieces.map(pc=>(
+    <span key={pc.id} className="confetti-piece" style={{left:pc.x,top:pc.y,background:pc.color,"--dx":pc.dx+"px","--dy":pc.dy+"px","--rot":pc.rot}}/>
+  ))}</>);
+  return [layer,burst];
+}
+
+function useConfettiRain(){
+  const [pieces,setPieces]=useState([]);
+  const trigger=()=>{
+    const colors=["#6ee7b7","#93c5fd","#5eead4","#a5f3fc","#bbf7d0"];
+    const newPieces=Array.from({length:60},(_,i)=>({
+      id:"r"+Date.now()+i, left:Math.random()*100,
+      dur:2.4+Math.random()*1.1, delay:Math.random()*0.5,
+      rot:(Math.random()*360)+"deg", color:colors[i%colors.length]
+    }));
+    setPieces(newPieces);
+    setTimeout(()=>setPieces([]),3600);
+  };
+  const layer=(<>{pieces.map(pc=>(
+    <span key={pc.id} className="confetti-fall" style={{left:pc.left+"%",background:pc.color,animationDuration:pc.dur+"s",animationDelay:pc.delay+"s","--rot":pc.rot}}/>
+  ))}</>);
+  return [layer,trigger];
+}
+
+const TEAMS_INIT=Array.from({length:8},(_,i)=>({id:"g"+(i+1),name:"Group "+(i+1),score:0}));
+const PTS=[30,25,20,15,10];
+
+const QUESTIONS=[
+ {prompt:"Name a quick 5-minute activity students do to reset during a stressful study session.",
+  answers:[
+    ["Going for a short walk","Getting your legs moving and stepping outside for some fresh air."],
+    ["Stretching","Loosening up muscles that get stiff from sitting too long."],
+    ["Listening to music","Popping in earphones to drown out the stress for a few minutes."],
+    ["Snacking","Reaching for a small bite to eat, even if you're not really hungry."],
+    ["Scrolling social media / Checking phone","Reaching for your phone 'just for a second' that turns into ten minutes."]]},
+ {prompt:"Name something you might do to practice good sleep health.",
+  answers:[
+    ["Stop using phones / devices before bed","Putting the screen away instead of scrolling right before lights out."],
+    ["Stick to a consistent sleep schedule","Going to bed and waking up around the same time, even on weekends."],
+    ["Limit caffeine in the afternoon/evening","Skipping that afternoon coffee so it doesn't keep you wired at night."],
+    ["Keep the bedroom dark / cool","Adjusting the room's temperature and lighting to help you drift off."],
+    ["Avoid long or late naps during the day","Resisting a 3pm nap that could steal from tonight's sleep."]]},
+ {prompt:"Name a comforting food or drink people reach for to relax after a long day.",
+  answers:[
+    ["Tea or hot chocolate","A warm drink you wrap your hands around while unwinding."],
+    ["Ramen / Instant noodles","A quick, salty bowl of noodles ready in just a few minutes."],
+    ["Sweets or desserts (Ice cream, cookies, chocolate)","Something sugary you treat yourself to when you need a pick-me-up."],
+    ["Fast food","Grabbing something from a drive-thru when cooking feels like too much."],
+    ["Warm soup","A hot bowl that feels like a hug when you're worn out."]]},
+ {prompt:"Name a small act of self-care that is completely free.",
+  answers:[
+    ["Going for a walk outside","Stepping outdoors for some fresh air and a change of scenery."],
+    ["Taking a nap","Closing your eyes for a short rest in the middle of the day."],
+    ["Taking a hot shower or bath","Letting warm water wash the tension of the day away."],
+    ["Unplugging from social media","Putting your phone down and logging off for a while."],
+    ["Doing breathing exercises or meditating","Sitting still and focusing on slow inhales and exhales."]]},
+ {prompt:"Name a physical sign that your body is feeling stressed.",
+  answers:[
+    ["Headache / Migraine","A throbbing pain in your head that shows up during a tough week."],
+    ["Muscle tension","Your shoulders creeping up toward your ears without you noticing."],
+    ["Fatigue / Constant tiredness","Feeling drained no matter how much you've slept."],
+    ["Stomachache / Digestive issues","Your gut reacting before you've even realized you're anxious."],
+    ["Hair loss","Noticing more strands than usual left behind after stress builds up."]]},
+ {prompt:"Name a grounding technique used to bring yourself back to the present moment.",
+  answers:[
+    ["Deep breathing exercises","Slowing everything down with a few long inhales and exhales."],
+    ["The 5-4-3-2-1 sensory method","Naming things you can see, hear, and touch, counting down as you go."],
+    ["Focusing on physical sensations","Noticing your feet on the floor or the chair beneath you."],
+    ["Journaling or brain dumping","Getting every racing thought out of your head and onto paper."],
+    ["Listening to music or nature sounds","Letting a calming sound pull your focus away from the noise in your head."]]},
+ {prompt:"Name someone a student might reach out to when they need emotional support.",
+  answers:[
+    ["Close friends","The people who already know what's going on in your life."],
+    ["Parents or family","The people you'd call home to when things feel heavy."],
+    ["Campus counselor or therapist","A trained professional on campus whose whole job is to listen."],
+    ["A trusted professor or lecturer","Someone in a classroom setting who's shown they genuinely care."],
+    ["Academic advisor or student mentor","Someone assigned to guide you through school who's more than just about grades."]]},
+ {prompt:"Name a healthy way to respond when you feel overwhelmed with assignments.",
+  answers:[
+    ["Break tasks down into smaller steps","Turning one giant task into several bite-sized ones."],
+    ["Make a prioritised to-do list","Writing everything down and deciding what actually needs to happen first."],
+    ["Take a short break to step away","Stepping away from your desk for a few minutes to reset."],
+    ["Ask a professor or classmate for guidance","Reaching out to someone who might already understand the material."],
+    ["Change your study location","Packing up and moving somewhere new when your desk stops working for you."]]},
+ {prompt:"Name a boundary someone might set for their digital life or social media.",
+  answers:[
+    ["Setting daily app time limits","Setting a timer that locks you out of an app after so long."],
+    ["Turning off non-essential notifications","Silencing the buzzes and pop-ups that aren't actually urgent."],
+    ["Putting the phone on Do Not Disturb / Silent","Flipping a switch so your phone stops interrupting you."],
+    ["Unfollowing or muting accounts that cause stress","Cutting accounts from your feed that leave you feeling worse."],
+    ["No harmful behaviour online","Choosing to be kind rather than say something hurtful behind a screen."]]},
+ {prompt:"Name a popular hobby students use to unwind on the weekend.",
+  answers:[
+    ["Watching movies, TV, or Netflix","Curling up on the couch and binge-watching a show."],
+    ["Gaming / Playing video games","Picking up a controller to lose yourself in another world for a bit."],
+    ["Hanging out with friends","Meeting up in person just to talk and laugh."],
+    ["Working out or sports","Getting your body moving to burn off the week's stress."],
+    ["Reading","Losing track of time inside the pages of a book."]]},
+ {prompt:"Name a common place people go on campus to relax or clear their head.",
+  answers:[
+    ["Library","A quiet space surrounded by books, better for thinking than talking."],
+    ["Sleeping Zone","A dedicated spot on campus made just for a quick shut-eye."],
+    ["Student Hub","A central spot where people gather between classes."],
+    ["Starbucks","A coffee chain many head to for a caffeine break."],
+    ["Cafetaria","Where people grab food and sit down with others."]]},
+ {prompt:"Name something people often write about in a gratitude journal.",
+  answers:[
+    ["Close relationships","The people you're thankful to have in your corner."],
+    ["Simple daily comforts","Small everyday things like a warm cup of coffee or a cozy blanket."],
+    ["Personal progress or small achievements","A goal you're proud of reaching, even a small one."],
+    ["Acts of kindness from others","Something someone did for you that made your day better."],
+    ["Good health or a peaceful day","Simply being thankful that nothing went wrong today."]]},
+].map(q=>({...q, answers:q.answers.map(([t,hint],i)=>[t,PTS[i],hint])}));
+
+const STAGES=[{id:1,label:"1x",name:"Preliminaries"},{id:2,label:"2x",name:"Semi Finals"},{id:3,label:"3x",name:"Finals"}];
+const TOTAL_SLIDES=QUESTIONS.length+2;
+const Q_PALETTES=[
+  "linear-gradient(150deg,#ecfdf5 0%,#f0fdfa 45%,#eff6ff 100%)",
+  "linear-gradient(150deg,#eff6ff 0%,#f5f3ff 45%,#fdf4ff 100%)",
+  "linear-gradient(150deg,#fefce8 0%,#ecfdf5 45%,#f0fdfa 100%)",
+];
+function gradientFor(slide,total){
+  if(slide===0) return "linear-gradient(150deg,#d1fae5 0%,#ffffff 50%,#dbeafe 100%)";
+  if(slide===total-1) return "linear-gradient(160deg,#fef9c3 0%,#ecfdf5 55%,#e0f2fe 100%)";
+  return Q_PALETTES[(slide-1)%Q_PALETTES.length];
+}
+
+function TeamSlot({teams,activeId,otherId,setActiveId,adjust,letter,delay}){
+  const grad=letter==="A"?"from-emerald-400 to-teal-400":"from-sky-400 to-cyan-400";
+  const bar=letter==="A"?"bg-emerald-400":"bg-sky-400";
+  const ring=letter==="A"?"ring-a":"ring-b";
+  const glow=letter==="A"?"glow-a text-emerald-700":"glow-b text-sky-700";
+  return (
+    <div className={`enter relative overflow-hidden flex-1 min-w-[340px] flex items-center gap-3 rounded-2xl border border-emerald-100/80 backdrop-blur-md bg-white/70 shadow-md pl-5 pr-4 py-4 transition-transform hover:scale-[1.02] hover:shadow-lg ${ring}`} style={{animationDelay:delay+"ms"}}>
+      <span className={`absolute top-0 left-0 right-0 h-1.5 ${bar}`}/>
+      <span className={`w-10 h-10 rounded-full flex items-center justify-center font-head font-bold text-base text-white bg-gradient-to-br ${grad} shadow-md ring-4 ring-white`}>{letter}</span>
+      <div className="flex flex-col flex-1 min-w-0">
+        <span className="text-[11px] font-medium text-slate-400">Team {letter}</span>
+        <div className="relative">
+          <select value={activeId} onChange={e=>setActiveId(e.target.value)}
+            className="appearance-none bg-white/70 border border-slate-200 rounded-lg pl-2 pr-6 py-0.5 font-head font-bold text-slate-800 text-base focus:outline-none focus:border-emerald-300 cursor-pointer hover:bg-white transition-colors">
+            {teams.filter(t=>t.id!==otherId).map(t=><option key={t.id} value={t.id}>{t.name}</option>)}
+          </select>
+          <ChevDown size={14} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"/>
+        </div>
+      </div>
+      <span key={teams.find(t=>t.id===activeId).score} className={`pop font-head text-4xl font-bold font-mono leading-none px-1 ${glow}`}>{teams.find(t=>t.id===activeId).score}</span>
+      <div className="flex flex-col gap-1">
+        <button onClick={()=>adjust(activeId,5)} className="rounded-lg px-2.5 py-1 text-sm font-bold bg-emerald-100 text-emerald-700 hover:bg-emerald-200 hover:scale-110 active:scale-90 transition-transform">+5</button>
+        <button onClick={()=>adjust(activeId,-5)} className="rounded-lg px-2.5 py-1 text-sm font-bold bg-emerald-100 text-emerald-700 hover:bg-emerald-200 hover:scale-110 active:scale-90 transition-transform">−5</button>
+      </div>
+    </div>
+  );
+}
+
+function Header({teams,aId,bId,setA,setB,adjust,onTeams,multiplier,setMultiplier}){
+  return (
+    <header className="flex flex-col gap-2 px-5 py-3 w-full sticky top-0 z-20">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="enter relative overflow-hidden glass rounded-2xl shadow-md border border-slate-100 px-6 py-4 shrink-0" style={{animationDelay:"0ms"}}>
+          <span className="absolute -bottom-4 -right-4 w-14 h-14 rounded-full bg-gradient-to-br from-emerald-300 to-sky-300 opacity-40"/>
+          <span className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-400 via-sky-400 to-emerald-400"/>
+          <span className="text-xs font-bold uppercase tracking-widest text-sky-500 block">The</span>
+          <h1 className="font-head text-3xl font-bold text-slate-900 leading-none relative">Wellness<br/>Feud</h1>
+        </div>
+        <div className="flex-1 flex items-center gap-4 min-w-[280px]">
+          <TeamSlot teams={teams} activeId={aId} otherId={bId} setActiveId={setA} adjust={adjust} letter="A" delay={60}/>
+          <TeamSlot teams={teams} activeId={bId} otherId={aId} setActiveId={setB} adjust={adjust} letter="B" delay={120}/>
+        </div>
+        <button onClick={onTeams} style={{animationDelay:"210ms"}}
+          className="enter flex items-center gap-1.5 px-3 py-2 rounded-xl glass border border-slate-100 text-slate-700 text-xs font-bold shadow-md shrink-0 hover:scale-[1.05] hover:-translate-y-1 hover:shadow-xl hover:bg-white active:scale-95 active:translate-y-0 transition-all">
+          <Users size={15}/> Teams
+        </button>
+      </div>
+      <div className="flex justify-end">
+        <div className="enter flex items-center gap-1 p-1 glass rounded-full border border-slate-100 shadow-sm" style={{animationDelay:"150ms"}}>
+          {STAGES.map(s=>(
+            <button key={s.id} onClick={()=>setMultiplier(s.id)}
+              className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all hover:scale-[1.05] active:scale-95 ${multiplier===s.id?"bg-gradient-to-r from-emerald-400 to-emerald-500 text-white shadow-[0_0_14px_rgba(16,185,129,.5)]":"text-slate-500 hover:text-slate-800"}`}>
+              {s.label} <span className="hidden md:inline">{s.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function AnswerTile({index,text,points,revealed,hint,hintText,onReveal,onHint,delay}){
+  return (
+    <div className="enter relative min-h-[6rem] w-full flip-card transition-all hover:-translate-y-1" style={{animationDelay:delay+"ms"}}>
+      <div className={`flip-inner ${revealed?"flipped":""}`}>
+        <div className="pod flip-face w-full h-full flex items-center justify-between gap-3 px-6 py-5 bg-white/90 backdrop-blur-sm rounded-2xl border border-emerald-100 border-t-2 border-t-emerald-400/60 shadow-md hover:shadow-lg transition-shadow">
+          <button onClick={()=>!revealed&&onReveal(index)} disabled={revealed} className="flex items-center gap-4 flex-1 min-w-0 hover:scale-[1.01] active:scale-[0.99] transition-transform text-left">
+            <span className="relative w-12 h-12 shrink-0 rounded-full flex items-center justify-center font-head font-bold text-xl text-white bg-gradient-to-br from-sky-300 to-emerald-400 shadow-[0_0_16px_rgba(16,185,129,.4)]">
+              {index+1}
+              <Leaf size={11} className="absolute -bottom-1 -right-1 text-emerald-600 bg-white rounded-full p-[2px] shadow-sm" strokeWidth={2.5}/>
+            </span>
+            <span className="flex items-center gap-2 text-slate-500 text-lg leading-snug"><EyeI size={19} className="shrink-0"/> {hint? hintText : "Click to reveal"}</span>
+          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button onClick={()=>onHint(index)} className="p-3 rounded-lg bg-sky-500 text-white shadow-[0_0_12px_rgba(14,165,233,.5)] hover:bg-sky-600 hover:scale-110 active:scale-90 transition-transform"><Bulb size={18}/></button>
+            <button onClick={()=>onReveal(index)} className="px-5 py-3 rounded-full bg-emerald-500 text-white text-base font-bold shadow-[0_0_14px_rgba(16,185,129,.4)] hover:bg-emerald-600 hover:scale-105 active:scale-95 transition-transform">Reveal</button>
+          </div>
+        </div>
+        <div className="pod flip-face flip-back w-full h-full flex items-center justify-between gap-3 px-6 py-5 bg-white/90 backdrop-blur-sm rounded-2xl border border-emerald-200 border-t-2 border-t-sky-400/60 shadow-md">
+          <span className="font-semibold text-slate-800 text-xl leading-snug pr-2">{text}</span>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="float bg-emerald-100 text-emerald-800 font-head font-extrabold px-4 py-2 rounded-lg text-2xl shadow-sm glow-a">+{points}</span>
+            <button onClick={()=>onReveal(index)} className="text-sm font-bold px-3 py-2 rounded-lg bg-sky-50 text-sky-700 hover:bg-sky-100 hover:scale-105 active:scale-95 transition-transform">Award</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RevealModal({data,teams,aId,bId,onAward,onSkip}){
+  if(!data) return null;
+  const a=teams.find(t=>t.id===aId), b=teams.find(t=>t.id===bId);
+  return (
+    <div className="fadeIn fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="pop glass border border-white rounded-3xl max-w-lg w-full px-8 py-9 text-center shadow-2xl">
+        <span className="text-emerald-600 text-xs font-bold tracking-[0.25em] mb-3 block">CORRECT ANSWER REVEALED</span>
+        <h3 className="font-head text-3xl font-bold text-slate-900 mb-4 leading-snug">{data.text}</h3>
+        <div className="font-head text-6xl md:text-7xl font-black text-sky-500 mb-4">+{data.points}</div>
+        <p className="text-slate-500 mb-6">Who gets the points?</p>
+        <div className="grid grid-cols-2 gap-4 mb-5">
+          <button onClick={()=>onAward("A")} className="rounded-2xl px-4 py-5 bg-gradient-to-br from-teal-400 to-sky-400 text-white shadow-md hover:scale-[1.04] active:scale-95 transition-transform">
+            <div className="text-xs font-bold tracking-widest opacity-90">TEAM A</div>
+            <div className="font-head text-xl font-bold">{a.name}</div>
+            <div className="text-sm opacity-90 mt-1">{a.score} → {a.score+data.points}</div>
+          </button>
+          <button onClick={()=>onAward("B")} className="rounded-2xl px-4 py-5 bg-gradient-to-br from-emerald-300 to-teal-300 text-emerald-950 shadow-md hover:scale-[1.04] active:scale-95 transition-transform">
+            <div className="text-xs font-bold tracking-widest opacity-80">TEAM B</div>
+            <div className="font-head text-xl font-bold">{b.name}</div>
+            <div className="text-sm opacity-80 mt-1">{b.score} → {b.score+data.points}</div>
+          </button>
+        </div>
+        <button onClick={onSkip} className="text-sm text-slate-400 font-semibold hover:text-slate-600 transition-colors">Reveal only, no points</button>
+      </div>
+    </div>
+  );
+}
+
+function IntroSlide(){
+  const icons=[
+    [Leaf,"-8%","18%",0,"text-emerald-400"],
+    [Heart,"92%","22%",0.4,"text-sky-400"],
+    [Droplet,"6%","78%",0.8,"text-sky-300"],
+    [Sparkles,"90%","76%",1.2,"text-emerald-300"],
+  ];
+  return (
+    <div className="flex-1 flex flex-col items-center justify-center px-6 text-center relative">
+      {icons.map(([Ic,l,t,d,c],i)=>(
+        <Ic key={i} size={34} strokeWidth={1.6} className={`float hidden md:block absolute opacity-70 ${c}`} style={{left:l,top:t,animationDelay:d+"s",animationDuration:(3+d)+"s"}}/>
+      ))}
+      <span className="enter text-sm font-bold tracking-[0.35em] text-sky-500 mb-4">A FAMILY FEUD-STYLE GAME</span>
+      <h1 className="enter font-head grad-text text-7xl md:text-9xl font-bold mb-8 leading-none" style={{animationDelay:"80ms"}}>
+        The Wellness<br/>Feud
+      </h1>
+      <p className="enter text-slate-500 text-base" style={{animationDelay:"200ms"}}>Use the arrow keys, or the buttons below, to move through the slides.</p>
+    </div>
+  );
+}
+
+function ResultsSlide({teams}){
+  const top=Math.max(...teams.map(t=>t.score));
+  const winners=teams.filter(t=>t.score===top);
+  const tie=winners.length>1 && top>0, allZero=top===0;
+  return (
+    <div className="flex-1 flex flex-col items-center justify-center px-6 py-6 text-center">
+      <div className="pop w-40 h-40 md:w-56 md:h-56 rounded-full glass border-4 border-emerald-300 flex items-center justify-center mb-6 shadow-[0_0_70px_rgba(16,185,129,.4)]"><Trophy size={90} className="text-emerald-600 md:hidden"/><Trophy size={130} className="text-emerald-600 hidden md:block"/></div>
+      <span className="enter flex items-center gap-2 text-sm font-bold tracking-[0.3em] text-emerald-600 mb-3" style={{animationDelay:"80ms"}}><Sparkles size={16}/> FINAL RESULT <Sparkles size={16}/></span>
+      <h2 className="enter font-head text-4xl md:text-6xl font-bold text-slate-900 mb-3" style={{animationDelay:"140ms"}}>
+        {allZero?"No points on the board yet!":tie?"It's a tie!":winners[0].name+" wins!"}
+      </h2>
+      {tie && !allZero && <p className="text-slate-500 text-lg mb-6">{winners.map(w=>w.name).join(" & ")}</p>}
+      <div className="enter glass border border-emerald-200 rounded-2xl px-10 py-5 flex items-center gap-3 shadow-md mb-8" style={{animationDelay:"200ms"}}>
+        <Crown size={24} className="text-emerald-600"/><span className="font-head text-3xl font-bold text-slate-900">{top}</span><span className="text-slate-500 text-base">points</span>
+      </div>
+      <div className="enter grid grid-cols-1 sm:grid-cols-2 gap-5 w-full max-w-2xl" style={{animationDelay:"260ms"}}>
+        {[...teams].sort((a,b)=>b.score-a.score).slice(0,2).map((t,i)=>{
+          const isWinner=t.score===top && !allZero;
+          const accent=i===0?"ring-a border-emerald-200":"ring-b border-sky-200";
+          return (
+            <div key={t.id} className={`relative overflow-hidden bg-white/90 backdrop-blur-sm rounded-3xl border ${accent} shadow-lg px-6 py-6 text-left`}>
+              {isWinner && <span className="absolute top-0 right-0 bg-gradient-to-bl from-amber-300 to-amber-400 text-amber-900 text-[10px] font-bold px-3 py-1 rounded-bl-xl">{tie?"TIED":"WINNER"}</span>}
+              <div className="flex items-center gap-2 mb-2">
+                {isWinner? <Trophy size={20} className="text-amber-500"/> : <Users size={18} className="text-slate-400"/>}
+                <span className="text-xs font-bold uppercase tracking-widest text-slate-400">{i===0?"1st place":"2nd place"}</span>
+              </div>
+              <div className="font-head text-2xl font-bold text-slate-900 mb-1">{t.name}</div>
+              <div className={`font-head text-4xl font-bold font-mono ${i===0?"glow-a text-emerald-700":"glow-b text-sky-700"}`}>{t.score}<span className="text-base text-slate-400 font-sans font-normal ml-1">pts</span></div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function TeamsPanel({open,onClose,teams,setTeams}){
+  const [tab,setTab]=useState("leaderboard");
+  if(!open) return null;
+  const ranked=[...teams].sort((a,b)=>b.score-a.score);
+  const rename=(id,name)=>setTeams(p=>p.map(t=>t.id===id?{...t,name}:t));
+  const setScore=(id,val)=>setTeams(p=>p.map(t=>t.id===id?{...t,score:Math.max(0,Math.round(val/5)*5)}:t));
+  return (
+    <div className="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="pop glass border border-white rounded-3xl max-w-lg w-full p-6 max-h-[85vh] overflow-y-auto shadow-2xl">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex gap-2">
+            <button onClick={()=>setTab("leaderboard")} className={`px-3 py-1.5 rounded-full text-xs font-bold transition-transform hover:scale-105 ${tab==="leaderboard"?"bg-emerald-500 text-white":"text-slate-500"}`}>Leaderboard</button>
+            <button onClick={()=>setTab("manage")} className={`px-3 py-1.5 rounded-full text-xs font-bold transition-transform hover:scale-105 ${tab==="manage"?"bg-emerald-500 text-white":"text-slate-500"}`}>Manage Teams</button>
+          </div>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-700 hover:scale-110 transition-transform"><X size={18}/></button>
+        </div>
+        {tab==="leaderboard" ? (
+          <div className="space-y-2">
+            {ranked.map((t,i)=>(
+              <div key={t.id} className="flex items-center justify-between glass border border-slate-100 rounded-xl px-4 py-2.5 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i===0?"bg-amber-200 text-amber-800":i===1?"bg-slate-200 text-slate-700":i===2?"bg-orange-200 text-orange-800":"text-slate-400"}`}>{i+1}</span>
+                  <span className="font-semibold text-sm text-slate-700">{t.name}</span>
+                </div>
+                <span className="font-head font-bold text-emerald-600">{t.score}</span>
+              </div>
+            ))}
+          </div>
+        ):(
+          <div className="space-y-2">
+            {teams.map(t=>(
+              <div key={t.id} className="flex items-center gap-2 glass border border-slate-100 rounded-xl px-3 py-2 shadow-sm">
+                <input value={t.name} onChange={e=>rename(t.id,e.target.value)} className="flex-1 bg-transparent text-sm font-semibold text-slate-700 focus:outline-none"/>
+                <button onClick={()=>setScore(t.id,t.score-5)} className="p-1 rounded-md hover:bg-slate-100 active:scale-90 transition-transform"><Minus size={13}/></button>
+                <span className="w-12 text-center font-head font-bold text-slate-700">{t.score}</span>
+                <button onClick={()=>setScore(t.id,t.score+5)} className="p-1 rounded-md hover:bg-slate-100 active:scale-90 transition-transform"><Plus size={13}/></button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const [teams,setTeams]=useState(TEAMS_INIT);
+  const [aId,setA]=useState("g1");
+  const [bId,setB]=useState("g2");
+  const [multiplier,setMultiplier]=useState(1);
+  const [slide,setSlide]=useState(0);
+  const [revealed,setRevealed]=useState(QUESTIONS.map(()=>({})));
+  const [hints,setHints]=useState(QUESTIONS.map(()=>({})));
+  const [panelOpen,setPanelOpen]=useState(false);
+  const [revealModal,setRevealModal]=useState(null);
+  const [confettiLayer,burst]=useConfetti();
+  const [rainLayer,rainTrigger]=useConfettiRain();
+
+  const adjust=(id,d)=>setTeams(p=>p.map(t=>t.id===id?{...t,score:Math.max(0,t.score+d)}:t));
+  const openReveal=(qi,i,text,points)=>{
+    setRevealed(prev=>{const next=[...prev];next[qi]={...next[qi],[i]:true};return next;});
+    setRevealModal({qi,i,text,points});
+  };
+  const handleAward=(team)=>{
+    if(!revealModal) return;
+    adjust(team==="A"?aId:bId,revealModal.points);
+    burst(window.innerWidth/2, window.innerHeight*0.4);
+    setRevealModal(null);
+  };
+  const handleSkip=()=>setRevealModal(null);
+  const toggleHint=(qi,i)=>setHints(prev=>{const next=[...prev];next[qi]={...next[qi],[i]:!next[qi][i]};return next;});
+  const resetQuestion=qi=>{setRevealed(prev=>{const next=[...prev];next[qi]={};return next;});setRevealModal(null);};
+
+  const qIndex=slide-1;
+  const isIntro=slide===0, isResults=slide===TOTAL_SLIDES-1;
+
+  useEffect(()=>{
+    const onKey=(e)=>{
+      if(panelOpen||revealModal) return;
+      if(["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName)) return;
+      if(e.key==="ArrowRight") setSlide(s=>Math.min(TOTAL_SLIDES-1,s+1));
+      if(e.key==="ArrowLeft") setSlide(s=>Math.max(0,s-1));
+    };
+    window.addEventListener("keydown",onKey);
+    return ()=>window.removeEventListener("keydown",onKey);
+  },[panelOpen,revealModal]);
+
+  useEffect(()=>{
+    if(isResults) rainTrigger();
+  },[isResults]);
+
+  return (
+    <div className="min-h-screen w-full flex flex-col relative" style={{background:gradientFor(slide,TOTAL_SLIDES),transition:"background .6s ease"}}>
+      <FloralBg/>
+      <Header teams={teams} aId={aId} bId={bId} setA={setA} setB={setB} adjust={adjust} onTeams={()=>setPanelOpen(true)} multiplier={multiplier} setMultiplier={setMultiplier}/>
+
+      <div key={slide} className="flex-1 flex flex-col">
+        {isIntro && <IntroSlide/>}
+        {!isIntro && !isResults && (
+          <div className="flex-1 flex flex-col items-center px-6 py-6 max-w-5xl mx-auto w-full">
+            <div className="enter w-full flex items-start justify-between mb-3">
+              <span className="text-sky-500 text-sm font-bold tracking-widest">QUESTION {qIndex+1}</span>
+              <button onClick={()=>resetQuestion(qIndex)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass border border-slate-100 text-slate-600 text-xs font-bold shadow-sm hover:scale-105 active:scale-95 transition-transform">
+                <Undo size={13}/> Hide answers
+              </button>
+            </div>
+            <h3 className="enter font-head text-2xl md:text-3xl font-bold text-emerald-900 text-left w-full mb-7" style={{animationDelay:"100ms"}}>{QUESTIONS[qIndex].prompt}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
+              {QUESTIONS[qIndex].answers.map(([text,points,hintText],i)=>(
+                <AnswerTile key={i} index={i} text={text} points={points*multiplier} revealed={!!revealed[qIndex][i]} hint={!!hints[qIndex][i]} hintText={hintText}
+                  onReveal={ii=>openReveal(qIndex,ii,text,points*multiplier)} onHint={ii=>toggleHint(qIndex,ii)} delay={140+i*60}/>
+              ))}
+            </div>
+          </div>
+        )}
+        {isResults && <ResultsSlide teams={teams}/>}
+      </div>
+
+      <footer className="flex items-center justify-between px-6 py-3 glass border-t border-slate-100">
+        <span className="text-[11px] text-slate-400">← → to navigate</span>
+        <div className="flex items-center gap-3">
+          <button onClick={()=>setSlide(s=>Math.max(0,s-1))} disabled={slide===0} className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-20 hover:scale-110 active:scale-90 transition-transform"><ChL size={18}/></button>
+          <span className="text-xs font-mono text-slate-500">{slide+1} / {TOTAL_SLIDES}</span>
+          <button onClick={()=>setSlide(s=>Math.min(TOTAL_SLIDES-1,s+1))} disabled={slide===TOTAL_SLIDES-1} className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-20 hover:scale-110 active:scale-90 transition-transform"><ChR size={18}/></button>
+        </div>
+      </footer>
+      <TeamsPanel open={panelOpen} onClose={()=>setPanelOpen(false)} teams={teams} setTeams={setTeams}/>
+      <RevealModal data={revealModal} teams={teams} aId={aId} bId={bId} onAward={handleAward} onSkip={handleSkip}/>
+      {confettiLayer}
+      {rainLayer}
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body></html>
