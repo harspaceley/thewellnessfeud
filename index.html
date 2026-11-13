@@ -6,15 +6,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{
+emerald:{50:"#f3f8f1",100:"#e4efe0",200:"#cbdfc4",300:"#a9c9a0",400:"#8bb280",500:"#6e9a64",600:"#588049",700:"#47662f",800:"#3d5a1d",900:"#36560e"},
+sky:{50:"#fdf5fe",100:"#f9e6fc",200:"#f5d0fa",300:"#efb8f7",400:"#e69ef4",500:"#c474d6",600:"#a557b8",700:"#8a4399",800:"#6d3679",900:"#582d62"},
+teal:{50:"#f4f9f2",100:"#e6f0e2",200:"#d3e5cd",300:"#bcd6b4",400:"#a3c698",500:"#86ad7a",600:"#6e9a64",700:"#587f4f",800:"#46663e",900:"#36560e"},
+cyan:{50:"#fef5f5",100:"#fde6e8",200:"#fbd0d4",300:"#f4aeb5",400:"#ea8891",500:"#dc6d78",600:"#c2525e",700:"#9f424c",800:"#80373f",900:"#682f36"},
+slate:{50:"#fbf8f6",100:"#f4efec",200:"#e8e1dd",300:"#d4cac6",400:"#aaa09f",500:"#7f7a76",600:"#605d58",700:"#4a4a3e",800:"#3b402b",900:"#2c3a14"}}}}}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
 <style>
   :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
-  body{margin:0;background:#fdfaf3;color:#0f172a;font-family:'Sora',system-ui,sans-serif;}
+  body{margin:0;background:#fbf2ef;color:#0f172a;font-family:'Sora',system-ui,sans-serif;}
   .font-head{font-family:'Quicksand',system-ui,sans-serif;}
-  .glow-title{font-family:'Quicksand',sans-serif;color:#065f46;text-shadow:0 0 16px rgba(16,185,129,.5),0 0 34px rgba(16,185,129,.3);}
-  .glass{background:rgba(255,255,255,.82);backdrop-filter:blur(14px);}
+  .glow-title{font-family:'Quicksand',sans-serif;color:#065f46;text-shadow:0 0 16px rgba(110,154,100,.5),0 0 34px rgba(110,154,100,.3);}
+  .glass{background:rgba(255,251,249,.86);backdrop-filter:blur(14px);}
   .blob{position:fixed;border-radius:9999px;filter:blur(70px);pointer-events:none;z-index:-10;}
   .flip-card{perspective:1200px;}
   .flip-inner{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.34,1.56,.64,1);transform-style:preserve-3d;}
@@ -33,18 +39,18 @@
   .confetti-piece{position:fixed;width:7px;height:7px;border-radius:2px;animation:confetti .9s ease-out forwards;pointer-events:none;z-index:60;}
   @keyframes fall{0%{transform:translateY(-10vh) rotate(0deg);opacity:1}90%{opacity:1}100%{transform:translateY(110vh) rotate(var(--rot));opacity:0}}
   .confetti-fall{position:fixed;top:0;width:9px;height:15px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:55;}
-  .mesh-grid{position:fixed;inset:0;z-index:-14;opacity:.5;background-image:linear-gradient(rgba(16,185,129,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,178,.06) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 40%,transparent 85%);mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 40%,transparent 85%);}
-  .spotlight{position:fixed;top:-10%;left:50%;transform:translateX(-50%);width:70vw;height:60vh;border-radius:9999px;background:radial-gradient(circle,rgba(255,255,255,.9) 0%,rgba(209,250,229,.4) 45%,transparent 72%);filter:blur(30px);z-index:-13;pointer-events:none;}
-  .glow-a{text-shadow:0 0 14px rgba(16,185,129,.45);}
-  .glow-b{text-shadow:0 0 14px rgba(14,165,233,.45);}
-  .ring-a{box-shadow:0 0 0 1px rgba(16,185,129,.25),0 0 24px rgba(16,185,129,.22);}
-  .ring-b{box-shadow:0 0 0 1px rgba(14,165,233,.25),0 0 24px rgba(14,165,233,.22);}
+  .mesh-grid{position:fixed;inset:0;z-index:-14;opacity:.5;background-image:linear-gradient(rgba(110,154,100,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(110,154,100,.06) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 40%,transparent 85%);mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,#000 40%,transparent 85%);}
+  .spotlight{position:fixed;top:-10%;left:50%;transform:translateX(-50%);width:70vw;height:60vh;border-radius:9999px;background:radial-gradient(circle,rgba(255,250,248,.8) 0%,rgba(240,214,246,.35) 45%,transparent 72%);filter:blur(30px);z-index:-13;pointer-events:none;}
+  .glow-a{text-shadow:0 0 10px rgba(110,154,100,.28);}
+  .glow-b{text-shadow:0 0 10px rgba(230,158,244,.28);}
+  .ring-a{box-shadow:0 0 0 1px rgba(110,154,100,.25),0 0 24px rgba(110,154,100,.22);}
+  .ring-b{box-shadow:0 0 0 1px rgba(230,158,244,.25),0 0 24px rgba(230,158,244,.22);}
   .pod{background-image:radial-gradient(rgba(15,23,42,.035) 1px,transparent 1px);background-size:10px 10px;}
-  .grad-text{background:linear-gradient(90deg,#0f172a,#047857 55%,#0284c7);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .grad-text{background:linear-gradient(90deg,#36560e,#6e9a64 50%,#c474d6);-webkit-background-clip:text;background-clip:text;color:transparent;}
   .tile-grid{display:grid;grid-template-columns:1fr;gap:1rem;}
   .tile-grid>*{min-height:6rem;}
   @media(min-width:768px){
-    .tile-grid{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,minmax(0,1fr));height:100%;}
+    .tile-grid{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,minmax(6.5rem,1fr));}
     .tile-grid>*{min-height:0;height:100%;}
   }
 </style>
@@ -52,8 +58,8 @@
 <div id="root"></div>
 <script type="text/babel" data-presets="react">
 const {useState,useEffect,useRef}=React;
-const Icon=({path,size=18,className="",strokeWidth=2})=>(
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className}>{path}</svg>
+const Icon=({path,size=18,className="",strokeWidth=2,style})=>(
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className} style={style}>{path}</svg>
 );
 const Plus=p=><Icon {...p} path={<><path d="M12 5v14"/><path d="M5 12h14"/></>}/>;
 const Minus=p=><Icon {...p} path={<path d="M5 12h14"/>}/>;
@@ -68,42 +74,82 @@ const Crown=p=><Icon {...p} path={<><path d="m2 18 2-9 4 4 4-7 4 7 4-4 2 9Z"/><p
 const Bulb=p=><Icon {...p} path={<><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a6 6 0 0 0-4 10.5c.7.6 1 1.4 1 2.5h6c0-1.1.3-1.9 1-2.5A6 6 0 0 0 12 2Z"/></>}/>;
 const Undo=p=><Icon {...p} path={<><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></>}/>;
 const ChevDown=p=><Icon {...p} path={<path d="m6 9 6 6 6-6"/>}/>;
+const Check=p=><Icon {...p} path={<path d="M20 6 9 17l-5-5"/>}/>;
 const Leaf=p=><Icon {...p} path={<path d="M11 20A7 7 0 0 1 4 13c0-4 7-11 7-11s7 7 7 11a7 7 0 0 1-7 7z"/>}/>;
 const Heart=p=><Icon {...p} path={<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/>}/>;
+const FlowerIcon=p=><Icon {...p} path={<><circle cx="12" cy="12" r="2.4"/>{[0,72,144,216,288].map(a=><circle key={a} cx="12" cy="6.2" r="3.2" transform={`rotate(${a} 12 12)`}/>)}</>}/>;
 const Droplet=p=><Icon {...p} path={<path d="M12 2s7 8 7 13a7 7 0 1 1-14 0c0-5 7-13 7-13Z"/>}/>;
 
+const FLW=[[120,150,120,-10,"#e69ef4"],[1760,130,140,15,"#ea8891"],[70,640,95,0,"#ea8891"],[1840,600,105,20,"#e69ef4"],[250,940,125,10,"#e69ef4"],[1630,950,115,-15,"#ea8891"],[960,40,64,0,"#e69ef4"],[560,1030,70,12,"#ea8891"]];
+const SPR=[[40,330,200,-8,"#e69ef4"],[1790,360,200,8,"#ea8891"],[1560,830,170,-6,"#e69ef4"],[150,790,170,6,"#ea8891"]];
+const SPK=[[330,70,46,"#ea8891"],[1690,790,52,"#e69ef4"],[190,450,38,"#e69ef4"],[1500,310,34,"#ea8891"],[1100,1020,40,"#e69ef4"]];
 function FloralBg(){
-  const blobs=[
-    ["-6rem","-6rem","22rem","22rem","rgba(167,243,208,.55)"],
-    ["auto","-8rem","24rem","24rem","rgba(191,219,254,.5)","right:-6rem;"],
-    ["auto","auto","20rem","20rem","rgba(253,230,138,.4)"],
-  ];
+  const img=useRef(null);
+  useEffect(()=>{
+    const el=img.current; if(!el) return;
+    if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const N=256,R=N/2,cv=document.createElement("canvas"); cv.width=cv.height=N;
+    const ctx=cv.getContext("2d"),data=ctx.createImageData(N,N);
+    for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+      const dx=(x+.5-R)/R,dy=(y+.5-R)/R,r=Math.hypot(dx,dy),k=(y*N+x)*4;
+      let vx=0,vy=0;
+      if(r>0&&r<1){const f=Math.sin(r*Math.PI*4)*Math.pow(1-r,1.6);vx=dx/r*f;vy=dy/r*f;}
+      data.data[k]=128+127*vx;data.data[k+1]=128+127*vy;data.data[k+2]=128;data.data[k+3]=255;
+    }
+    ctx.putImageData(data,0,0);
+    const url=cv.toDataURL();
+    el.setAttribute("href",url); el.setAttributeNS("http://www.w3.org/1999/xlink","xlink:href",url);
+    const SIZE=380; let tx=0,ty=0,cx=-9999,cy=-9999,raf=0;
+    const tick=()=>{
+      cx+=(tx-cx)*.18; cy+=(ty-cy)*.18;
+      el.setAttribute("x",cx-SIZE/2); el.setAttribute("y",cy-SIZE/2);
+      raf=(Math.abs(tx-cx)>.4||Math.abs(ty-cy)>.4)?requestAnimationFrame(tick):0;
+    };
+    const move=e=>{tx=e.clientX;ty=e.clientY; if(cx<-5000){cx=tx;cy=ty;} if(!raf) raf=requestAnimationFrame(tick);};
+    window.addEventListener("pointermove",move);
+    return ()=>{window.removeEventListener("pointermove",move);cancelAnimationFrame(raf);};
+  },[]);
+  const lines=[200,380,560,740,920];
   return (
     <>
       <div className="spotlight"/>
-      <div className="mesh-grid"/>
-      <div className="blob" style={{top:"-6rem",left:"-6rem",width:"22rem",height:"22rem",background:"rgba(167,243,208,.55)"}}/>
-      <div className="blob" style={{top:"-8rem",right:"-6rem",width:"24rem",height:"24rem",background:"rgba(191,219,254,.5)"}}/>
-      <div className="blob" style={{bottom:"-8rem",left:"10%",width:"20rem",height:"20rem",background:"rgba(253,230,138,.35)"}}/>
-      <div className="blob" style={{bottom:"-6rem",right:"5%",width:"18rem",height:"18rem",background:"rgba(244,114,182,.3)"}}/>
-      <div className="blob" style={{top:"35%",left:"45%",width:"16rem",height:"16rem",background:"rgba(94,234,212,.28)"}}/>
-      <svg className="fixed inset-0 w-full h-full -z-20 opacity-[0.07]" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <pattern id="fl" width="200" height="200" patternUnits="userSpaceOnUse">
-            {[0,1,2,3].map(i=>{
-              const cx=(i%2)*100+40, cy=Math.floor(i/2)*100+40;
-              return (
-                <g key={i} transform={`translate(${cx},${cy})`}>
-                  {[0,72,144,216,288].map(a=>(
-                    <ellipse key={a} cx="0" cy="-10" rx="7" ry="12" fill="#166534" transform={`rotate(${a})`}/>
-                  ))}
-                </g>
-              );
-            })}
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#fl)"/>
+      <div className="blob" style={{top:"-6rem",left:"-6rem",width:"22rem",height:"22rem",background:"rgba(110,154,100,.28)"}}/>
+      <div className="blob" style={{top:"-8rem",right:"-6rem",width:"24rem",height:"24rem",background:"rgba(230,158,244,.35)"}}/>
+      <div className="blob" style={{bottom:"-8rem",left:"10%",width:"20rem",height:"20rem",background:"rgba(234,136,145,.28)"}}/>
+      <div className="blob" style={{bottom:"-6rem",right:"5%",width:"18rem",height:"18rem",background:"rgba(230,158,244,.28)"}}/>
+      <svg width="0" height="0" style={{position:"absolute"}} aria-hidden="true">
+        <filter id="water" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" x="0" y="0" width="4000" height="3000" colorInterpolationFilters="sRGB">
+          <feFlood floodColor="rgb(128,128,128)" result="neutral"/>
+          <feImage ref={img} x="-9999" y="-9999" width="380" height="380" preserveAspectRatio="none" result="ripple"/>
+          <feMerge result="map"><feMergeNode in="neutral"/><feMergeNode in="ripple"/></feMerge>
+          <feDisplacementMap in="SourceGraphic" in2="map" scale="70" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
       </svg>
+      <div style={{position:"fixed",inset:0,zIndex:-9,pointerEvents:"none",filter:"url(#water)"}}>
+        <svg width="100%" height="100%" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <symbol id="flw" viewBox="-30 -30 60 60">
+              {[0,72,144,216,288].map(a=><circle key={a} cx="0" cy="-15" r="10.5" fill="currentColor" transform={`rotate(${a})`}/>)}
+              <circle r="7.5" fill="#fff0cf"/>
+            </symbol>
+            <symbol id="spr" viewBox="0 0 60 120">
+              <path d="M30 118V30M30 70C24 62 16 56 14 50M30 66C36 60 44 56 46 52" stroke="#6e9a64" strokeWidth="3" fill="none" strokeLinecap="round"/>
+              <path d="M30 95C18 92 12 82 12 72C24 74 30 84 30 95Z" fill="#6e9a64"/>
+              <path d="M30 80C42 77 48 67 48 57C36 59 30 69 30 80Z" fill="#6e9a64"/>
+              <path d="M18 26C18 10 30 2 30 2C30 2 42 10 42 26C36 32 24 32 18 26Z" fill="currentColor"/>
+              <path d="M5 52C5 42 14 36 14 36C14 36 23 42 23 52C18 57 10 57 5 52Z" fill="currentColor"/>
+              <path d="M37 54C37 44 46 38 46 38C46 38 55 44 55 54C50 59 42 59 37 54Z" fill="currentColor"/>
+            </symbol>
+            <symbol id="spk" viewBox="-32 -32 64 64">
+              <path d="M0 -30C4 -10 10 -4 30 0C10 4 4 10 0 30C-4 10 -10 4 -30 0C-10 -4 -4 -10 0 -30Z" fill="currentColor"/>
+            </symbol>
+          </defs>
+          {lines.map(y=><path key={y} d={`M-50 ${y}Q240 ${y-30} 480 ${y}T960 ${y}T1440 ${y}T1920 ${y}T2400 ${y}`} stroke="#6e9a64" strokeOpacity=".16" strokeWidth="2" fill="none"/>)}
+          {FLW.map(([x,y,sz,r,c],i)=><use key={"f"+i} href="#flw" x={x-sz/2} y={y-sz/2} width={sz} height={sz} color={c} opacity=".65" transform={`rotate(${r} ${x} ${y})`}/>)}
+          {SPR.map(([x,y,sz,r,c],i)=><use key={"p"+i} href="#spr" x={x-sz/4} y={y-sz/2} width={sz/2} height={sz} color={c} opacity=".65" transform={`rotate(${r} ${x} ${y})`}/>)}
+          {SPK.map(([x,y,sz,c],i)=><use key={"k"+i} href="#spk" x={x-sz/2} y={y-sz/2} width={sz} height={sz} color={c} opacity=".7"/>)}
+        </svg>
+      </div>
     </>
   );
 }
@@ -116,7 +162,7 @@ function useConfetti(){
       return {id:Date.now()+i, x, y,
         dx:Math.cos(angle)*dist, dy:Math.sin(angle)*dist-40,
         rot:(Math.random()*360)+"deg",
-        color:["#6ee7b7","#93c5fd","#fcd34d","#f9a8d4"][i%4]};
+        color:["#6e9a64","#e69ef4","#ea8891","#a9c9a0"][i%4]};
     });
     setPieces(p=>[...p,...newPieces]);
     setTimeout(()=>setPieces(p=>p.filter(pc=>!newPieces.includes(pc))),900);
@@ -130,7 +176,7 @@ function useConfetti(){
 function useConfettiRain(){
   const [pieces,setPieces]=useState([]);
   const trigger=()=>{
-    const colors=["#6ee7b7","#93c5fd","#5eead4","#a5f3fc","#bbf7d0"];
+    const colors=["#6e9a64","#e69ef4","#ea8891","#a9c9a0","#efb8f7"];
     const newPieces=Array.from({length:60},(_,i)=>({
       id:"r"+Date.now()+i, left:Math.random()*100,
       dur:2.4+Math.random()*1.1, delay:Math.random()*0.5,
@@ -238,36 +284,61 @@ const QUESTIONS=[
 const STAGES=[{id:1,label:"1x",name:"Preliminaries"},{id:2,label:"2x",name:"Semi Finals"},{id:3,label:"3x",name:"Finals"}];
 const TOTAL_SLIDES=QUESTIONS.length+2;
 const Q_PALETTES=[
-  "linear-gradient(150deg,#ecfdf5 0%,#f0fdfa 45%,#eff6ff 100%)",
-  "linear-gradient(150deg,#eff6ff 0%,#f5f3ff 45%,#fdf4ff 100%)",
-  "linear-gradient(150deg,#fefce8 0%,#ecfdf5 45%,#f0fdfa 100%)",
+  "linear-gradient(150deg,#fdf1f3 0%,#f9effb 50%,#f0f6ed 100%)",
+  "linear-gradient(150deg,#f2f8ee 0%,#fbf2f6 50%,#faeefb 100%)",
+  "linear-gradient(150deg,#fbeef1 0%,#f5effa 45%,#edf5e9 100%)",
 ];
 function gradientFor(slide,total){
-  if(slide===0) return "linear-gradient(150deg,#d1fae5 0%,#ffffff 50%,#dbeafe 100%)";
-  if(slide===total-1) return "linear-gradient(160deg,#fef9c3 0%,#ecfdf5 55%,#e0f2fe 100%)";
+  if(slide===0) return "linear-gradient(150deg,#f7e2fb 0%,#fff5f1 50%,#e1eddc 100%)";
+  if(slide===total-1) return "linear-gradient(160deg,#fde3e6 0%,#f5ebfa 55%,#e1eddc 100%)";
   return Q_PALETTES[(slide-1)%Q_PALETTES.length];
 }
 
 function TeamSlot({teams,activeId,otherId,setActiveId,adjust,letter,delay}){
+  const [open,setOpen]=useState(false);
+  const ref=useRef(null);
+  useEffect(()=>{
+    if(!open) return;
+    const onDown=e=>{ if(ref.current&&!ref.current.contains(e.target)) setOpen(false); };
+    const onKey=e=>{ if(e.key==="Escape") setOpen(false); };
+    document.addEventListener("mousedown",onDown); document.addEventListener("keydown",onKey);
+    return ()=>{document.removeEventListener("mousedown",onDown);document.removeEventListener("keydown",onKey);};
+  },[open]);
+  const team=teams.find(t=>t.id===activeId);
   const grad=letter==="A"?"from-emerald-400 to-teal-400":"from-sky-400 to-cyan-400";
   const bar=letter==="A"?"bg-emerald-400":"bg-sky-400";
   const ring=letter==="A"?"ring-a":"ring-b";
   const glow=letter==="A"?"glow-a text-emerald-700":"glow-b text-sky-700";
   return (
-    <div className={`enter relative overflow-hidden flex-1 min-w-[340px] flex items-center gap-3 rounded-2xl border border-emerald-100/80 backdrop-blur-md bg-white/70 shadow-md pl-5 pr-4 py-4 transition-transform hover:scale-[1.02] hover:shadow-lg ${ring}`} style={{animationDelay:delay+"ms"}}>
-      <span className={`absolute top-0 left-0 right-0 h-1.5 ${bar}`}/>
-      <span className={`w-10 h-10 rounded-full flex items-center justify-center font-head font-bold text-base text-white bg-gradient-to-br ${grad} shadow-md ring-4 ring-white`}>{letter}</span>
+    <div className={`enter relative flex-1 min-w-[340px] flex items-center gap-3 rounded-2xl border border-emerald-100/80 backdrop-blur-md bg-white/70 shadow-md pl-5 pr-4 py-4 ${ring}`} style={{animationDelay:delay+"ms",zIndex:open?40:undefined}}>
+      <span className={`absolute top-0 left-0 right-0 h-1.5 rounded-t-2xl ${bar}`}/>
+      <span className={`w-10 h-10 rounded-full flex items-center justify-center font-head font-bold text-base text-white bg-gradient-to-br ${grad} shadow-md ring-4 ring-white/80`}>{letter}</span>
       <div className="flex flex-col flex-1 min-w-0">
-        <span className="text-[11px] font-medium text-slate-400">Team {letter}</span>
-        <div className="relative">
-          <select value={activeId} onChange={e=>setActiveId(e.target.value)}
-            className="appearance-none bg-white/70 border border-slate-200 rounded-lg pl-2 pr-6 py-0.5 font-head font-bold text-slate-800 text-base focus:outline-none focus:border-emerald-300 cursor-pointer hover:bg-white transition-colors">
-            {teams.filter(t=>t.id!==otherId).map(t=><option key={t.id} value={t.id}>{t.name}</option>)}
-          </select>
-          <ChevDown size={14} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"/>
+        <span className="text-[11px] font-medium text-slate-500 mb-0.5">Team {letter}</span>
+        <div ref={ref} data-nonav="1" className="relative w-fit">
+          <button type="button" onClick={()=>setOpen(o=>!o)} aria-haspopup="listbox" aria-expanded={open}
+            className={`flex items-center gap-2 pl-3 pr-2.5 py-1.5 rounded-xl border-2 bg-white font-head font-bold text-slate-800 text-base shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 ${open?"border-emerald-600":"border-emerald-400"}`}>
+            <span className="truncate">{team.name}</span>
+            <ChevDown size={16} strokeWidth={2.5} className={`text-emerald-600 transition-transform duration-200 ${open?"rotate-180":""}`}/>
+          </button>
+          {open && (
+            <div role="listbox" className="pop origin-top-left absolute left-0 top-full mt-2 w-60 max-h-72 overflow-y-auto rounded-2xl border-2 border-emerald-300 bg-white shadow-xl p-1.5 z-50">
+              {teams.map(t=>{
+                const disabled=t.id===otherId, selected=t.id===activeId;
+                return (
+                  <button key={t.id} type="button" role="option" aria-selected={selected} disabled={disabled}
+                    onClick={()=>{setActiveId(t.id);setOpen(false);}}
+                    className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-left font-semibold text-sm transition-colors ${selected?"bg-emerald-100 text-emerald-800":disabled?"text-slate-300 cursor-not-allowed":"text-slate-700 hover:bg-emerald-50"}`}>
+                    <span className="flex items-center gap-2">{selected?<Check size={15} strokeWidth={3} className="text-emerald-600"/>:<span className="w-[15px]"/>}{t.name}</span>
+                    <span className="font-mono text-xs text-slate-400">{disabled?"in play":t.score}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
-      <span key={teams.find(t=>t.id===activeId).score} className={`pop font-head text-4xl font-bold font-mono leading-none px-1 ${glow}`}>{teams.find(t=>t.id===activeId).score}</span>
+      <span key={team.score} className={`pop font-head text-4xl font-bold font-mono leading-none px-1 ${glow}`}>{team.score}</span>
       <div className="flex flex-col gap-1">
         <button onClick={()=>adjust(activeId,5)} className="rounded-lg px-2.5 py-1 text-sm font-bold bg-emerald-100 text-emerald-700 hover:bg-emerald-200 hover:scale-110 active:scale-90 transition-transform">+5</button>
         <button onClick={()=>adjust(activeId,-5)} className="rounded-lg px-2.5 py-1 text-sm font-bold bg-emerald-100 text-emerald-700 hover:bg-emerald-200 hover:scale-110 active:scale-90 transition-transform">−5</button>
@@ -278,7 +349,7 @@ function TeamSlot({teams,activeId,otherId,setActiveId,adjust,letter,delay}){
 
 function Header({teams,aId,bId,setA,setB,adjust,onTeams,multiplier,setMultiplier}){
   return (
-    <header className="flex flex-col gap-2 px-5 py-3 w-full sticky top-0 z-20">
+    <header className="flex flex-col gap-2 px-5 py-3 w-full shrink-0 relative z-20">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="enter relative overflow-hidden glass rounded-2xl shadow-md border border-slate-100 px-6 py-4 shrink-0" style={{animationDelay:"0ms"}}>
           <span className="absolute -bottom-4 -right-4 w-14 h-14 rounded-full bg-gradient-to-br from-emerald-300 to-sky-300 opacity-40"/>
@@ -299,7 +370,7 @@ function Header({teams,aId,bId,setA,setB,adjust,onTeams,multiplier,setMultiplier
         <div className="enter flex items-center gap-1 p-1 glass rounded-full border border-slate-100 shadow-sm" style={{animationDelay:"150ms"}}>
           {STAGES.map(s=>(
             <button key={s.id} onClick={()=>setMultiplier(s.id)}
-              className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all hover:scale-[1.05] active:scale-95 ${multiplier===s.id?"bg-gradient-to-r from-emerald-400 to-emerald-500 text-white shadow-[0_0_14px_rgba(16,185,129,.5)]":"text-slate-500 hover:text-slate-800"}`}>
+              className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all hover:scale-[1.05] active:scale-95 ${multiplier===s.id?"bg-gradient-to-r from-emerald-400 to-emerald-500 text-white shadow-[0_0_14px_rgba(110,154,100,.5)]":"text-slate-500 hover:text-slate-800"}`}>
               {s.label} <span className="hidden md:inline">{s.name}</span>
             </button>
           ))}
@@ -315,15 +386,15 @@ function AnswerTile({index,text,points,revealed,hint,hintText,onReveal,onHint,de
       <div className={`flip-inner ${revealed?"flipped":""}`}>
         <div className="pod flip-face w-full h-full flex items-center justify-between gap-4 px-7 py-5 bg-white/90 backdrop-blur-sm rounded-2xl border border-emerald-100 border-t-2 border-t-emerald-400/60 shadow-md hover:shadow-lg transition-shadow">
           <button onClick={()=>!revealed&&onReveal(index)} disabled={revealed} className="flex items-center gap-4 flex-1 min-w-0 hover:scale-[1.01] active:scale-[0.99] transition-transform text-left">
-            <span className="relative w-14 h-14 shrink-0 rounded-full flex items-center justify-center font-head font-bold text-2xl text-white bg-gradient-to-br from-sky-300 to-emerald-400 shadow-[0_0_16px_rgba(16,185,129,.4)]">
+            <span className="relative w-14 h-14 shrink-0 rounded-full flex items-center justify-center font-head font-bold text-2xl text-white bg-gradient-to-br from-sky-300 to-emerald-400 shadow-[0_0_16px_rgba(110,154,100,.4)]">
               {index+1}
               <Leaf size={12} className="absolute -bottom-1 -right-1 text-emerald-600 bg-white rounded-full p-[2px] shadow-sm" strokeWidth={2.5}/>
             </span>
             <span className="flex items-center gap-2 text-slate-500 text-xl leading-snug"><EyeI size={21} className="shrink-0"/> {hint? hintText : "Click to reveal"}</span>
           </button>
           <div className="flex items-center gap-2 shrink-0">
-            <button onClick={()=>onHint(index)} className="p-3.5 rounded-lg bg-sky-500 text-white shadow-[0_0_12px_rgba(14,165,233,.5)] hover:bg-sky-600 hover:scale-110 active:scale-90 transition-transform"><Bulb size={20}/></button>
-            <button onClick={()=>onReveal(index)} className="px-6 py-3.5 rounded-full bg-emerald-500 text-white text-lg font-bold shadow-[0_0_14px_rgba(16,185,129,.4)] hover:bg-emerald-600 hover:scale-105 active:scale-95 transition-transform">Reveal</button>
+            <button onClick={()=>onHint(index)} className="p-3.5 rounded-lg bg-sky-500 text-white shadow-[0_0_12px_rgba(230,158,244,.5)] hover:bg-sky-600 hover:scale-110 active:scale-90 transition-transform"><Bulb size={20}/></button>
+            <button onClick={()=>onReveal(index)} className="px-6 py-3.5 rounded-full bg-emerald-500 text-white text-lg font-bold shadow-[0_0_14px_rgba(110,154,100,.4)] hover:bg-emerald-600 hover:scale-105 active:scale-95 transition-transform">Reveal</button>
           </div>
         </div>
         <div className="pod flip-face flip-back w-full h-full flex items-center justify-between gap-4 px-7 py-5 bg-white/90 backdrop-blur-sm rounded-2xl border border-emerald-200 border-t-2 border-t-sky-400/60 shadow-md">
@@ -349,12 +420,12 @@ function RevealModal({data,teams,aId,bId,onAward,onSkip}){
         <div className="font-head text-6xl md:text-7xl font-black text-sky-500 mb-4">+{data.points}</div>
         <p className="text-slate-500 mb-6">Who gets the points?</p>
         <div className="grid grid-cols-2 gap-4 mb-5">
-          <button onClick={()=>onAward("A")} className="rounded-2xl px-4 py-5 bg-gradient-to-br from-teal-400 to-sky-400 text-white shadow-md hover:scale-[1.04] active:scale-95 transition-transform">
+          <button onClick={()=>onAward("A")} className="rounded-2xl px-4 py-5 bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-md hover:scale-[1.04] active:scale-95 transition-transform">
             <div className="text-xs font-bold tracking-widest opacity-90">TEAM A</div>
             <div className="font-head text-xl font-bold">{a.name}</div>
             <div className="text-sm opacity-90 mt-1">{a.score} → {a.score+data.points}</div>
           </button>
-          <button onClick={()=>onAward("B")} className="rounded-2xl px-4 py-5 bg-gradient-to-br from-emerald-300 to-teal-300 text-emerald-950 shadow-md hover:scale-[1.04] active:scale-95 transition-transform">
+          <button onClick={()=>onAward("B")} className="rounded-2xl px-4 py-5 bg-gradient-to-br from-cyan-300 to-sky-300 text-emerald-900 shadow-md hover:scale-[1.04] active:scale-95 transition-transform">
             <div className="text-xs font-bold tracking-widest opacity-80">TEAM B</div>
             <div className="font-head text-xl font-bold">{b.name}</div>
             <div className="text-sm opacity-80 mt-1">{b.score} → {b.score+data.points}</div>
@@ -371,7 +442,7 @@ function IntroSlide(){
     [Leaf,"-8%","18%",0,"text-emerald-400"],
     [Heart,"92%","22%",0.4,"text-sky-400"],
     [Droplet,"6%","78%",0.8,"text-sky-300"],
-    [Sparkles,"90%","76%",1.2,"text-emerald-300"],
+    [FlowerIcon,"90%","76%",1.2,"text-cyan-400"],
   ];
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-6 text-center relative">
@@ -393,32 +464,23 @@ function ResultsSlide({teams}){
   const tie=winners.length>1 && top>0, allZero=top===0;
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-6 py-6 text-center">
-      <div className="pop w-40 h-40 md:w-56 md:h-56 rounded-full glass border-4 border-emerald-300 flex items-center justify-center mb-6 shadow-[0_0_70px_rgba(16,185,129,.4)]"><Trophy size={90} className="text-emerald-600 md:hidden"/><Trophy size={130} className="text-emerald-600 hidden md:block"/></div>
+      <div className="pop w-40 h-40 md:w-56 md:h-56 rounded-full glass border-4 border-emerald-300 flex items-center justify-center mb-6 shadow-[0_0_70px_rgba(110,154,100,.35)]"><Trophy size={90} className="text-emerald-600 md:hidden"/><Trophy size={130} className="text-emerald-600 hidden md:block"/></div>
       <span className="enter flex items-center gap-2 text-sm font-bold tracking-[0.3em] text-emerald-600 mb-3" style={{animationDelay:"80ms"}}><Sparkles size={16}/> FINAL RESULT <Sparkles size={16}/></span>
-      <h2 className="enter font-head text-4xl md:text-6xl font-bold text-slate-900 mb-3" style={{animationDelay:"140ms"}}>
+      <h2 className="enter font-head text-4xl md:text-6xl font-bold text-slate-900 mb-6" style={{animationDelay:"140ms"}}>
         {allZero?"No points on the board yet!":tie?"It's a tie!":winners[0].name+" wins!"}
       </h2>
-      {tie && !allZero && <p className="text-slate-500 text-lg mb-6">{winners.map(w=>w.name).join(" & ")}</p>}
-      <div className="enter glass border border-emerald-200 rounded-2xl px-10 py-5 flex items-center gap-3 shadow-md mb-8" style={{animationDelay:"200ms"}}>
-        <Crown size={24} className="text-emerald-600"/><span className="font-head text-3xl font-bold text-slate-900">{top}</span><span className="text-slate-500 text-base">points</span>
-      </div>
-      <div className="enter grid grid-cols-1 sm:grid-cols-2 gap-5 w-full max-w-2xl" style={{animationDelay:"260ms"}}>
-        {[...teams].sort((a,b)=>b.score-a.score).slice(0,2).map((t,i)=>{
-          const isWinner=t.score===top && !allZero;
-          const accent=i===0?"ring-a border-emerald-200":"ring-b border-sky-200";
-          return (
-            <div key={t.id} className={`relative overflow-hidden bg-white/90 backdrop-blur-sm rounded-3xl border ${accent} shadow-lg px-6 py-6 text-left`}>
-              {isWinner && <span className="absolute top-0 right-0 bg-gradient-to-bl from-amber-300 to-amber-400 text-amber-900 text-[10px] font-bold px-3 py-1 rounded-bl-xl">{tie?"TIED":"WINNER"}</span>}
-              <div className="flex items-center gap-2 mb-2">
-                {isWinner? <Trophy size={20} className="text-amber-500"/> : <Users size={18} className="text-slate-400"/>}
-                <span className="text-xs font-bold uppercase tracking-widest text-slate-400">{i===0?"1st place":"2nd place"}</span>
-              </div>
-              <div className="font-head text-2xl font-bold text-slate-900 mb-1">{t.name}</div>
-              <div className={`font-head text-4xl font-bold font-mono ${i===0?"glow-a text-emerald-700":"glow-b text-sky-700"}`}>{t.score}<span className="text-base text-slate-400 font-sans font-normal ml-1">pts</span></div>
+      {!allZero && (
+        <div className="enter flex flex-wrap justify-center gap-5 w-full" style={{animationDelay:"220ms"}}>
+          {winners.map(t=>(
+            <div key={t.id} className="relative overflow-hidden bg-white/90 backdrop-blur-sm rounded-3xl border border-emerald-200 ring-a shadow-lg px-14 py-8 min-w-[320px]">
+              <span className="absolute top-0 right-0 bg-gradient-to-bl from-cyan-300 to-cyan-400 text-emerald-900 text-[11px] font-bold px-3.5 py-1 rounded-bl-xl">{tie?"TIED 1ST":"1ST PLACE"}</span>
+              <Crown size={26} className="mx-auto mb-2 text-cyan-500"/>
+              <div className="font-head text-3xl font-bold text-slate-900 mb-1">{t.name}</div>
+              <div className="font-head text-6xl font-bold font-mono glow-a text-emerald-700">{t.score}<span className="text-lg text-slate-500 font-sans font-normal ml-2">points</span></div>
             </div>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -503,6 +565,7 @@ function App(){
     const onKey=(e)=>{
       if(panelOpen||revealModal) return;
       if(["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName)) return;
+      if(document.activeElement.closest&&document.activeElement.closest("[data-nonav]")) return;
       if(e.key==="ArrowRight") setSlide(s=>Math.min(TOTAL_SLIDES-1,s+1));
       if(e.key==="ArrowLeft") setSlide(s=>Math.max(0,s-1));
     };
@@ -515,14 +578,14 @@ function App(){
   },[isResults]);
 
   return (
-    <div className="h-screen w-full flex flex-col relative overflow-y-auto" style={{background:gradientFor(slide,TOTAL_SLIDES),transition:"background .6s ease"}}>
+    <div className="h-screen w-full flex flex-col relative isolate overflow-hidden" style={{background:gradientFor(slide,TOTAL_SLIDES),transition:"background .6s ease"}}>
       <FloralBg/>
       <Header teams={teams} aId={aId} bId={bId} setA={setA} setB={setB} adjust={adjust} onTeams={()=>setPanelOpen(true)} multiplier={multiplier} setMultiplier={setMultiplier}/>
 
-      <div key={slide} className="flex-1 flex flex-col min-h-0">
+      <div key={slide} className="flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden">
         {isIntro && <IntroSlide/>}
         {!isIntro && !isResults && (
-          <div className="flex-1 flex flex-col items-center px-6 py-4 max-w-[1320px] mx-auto w-full min-h-0">
+          <div className="flex-1 flex flex-col items-center px-6 py-4 max-w-[1320px] mx-auto w-full min-h-[640px]">
             <div className="enter w-full flex items-start justify-between mb-3 shrink-0">
               <span className="text-sky-500 text-sm font-bold tracking-widest">QUESTION {qIndex+1}</span>
               <button onClick={()=>resetQuestion(qIndex)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass border border-slate-100 text-slate-600 text-xs font-bold shadow-sm hover:scale-105 active:scale-95 transition-transform">
@@ -541,13 +604,16 @@ function App(){
         {isResults && <ResultsSlide teams={teams}/>}
       </div>
 
-      <footer className="flex items-center justify-between px-6 py-3 glass border-t border-slate-100">
-        <span className="text-[11px] text-slate-400">← → to navigate</span>
-        <div className="flex items-center gap-3">
-          <button onClick={()=>setSlide(s=>Math.max(0,s-1))} disabled={slide===0} className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-20 hover:scale-110 active:scale-90 transition-transform"><ChL size={18}/></button>
-          <span className="text-xs font-mono text-slate-500">{slide+1} / {TOTAL_SLIDES}</span>
-          <button onClick={()=>setSlide(s=>Math.min(TOTAL_SLIDES-1,s+1))} disabled={slide===TOTAL_SLIDES-1} className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-20 hover:scale-110 active:scale-90 transition-transform"><ChR size={18}/></button>
+      <footer className="relative z-30 shrink-0 flex items-center justify-between px-6 py-3 glass border-t border-slate-200/70">
+        <span className="text-[11px] text-slate-400 w-[110px]">← → to navigate</span>
+        <div className="flex items-center gap-4">
+          <button type="button" aria-label="Previous slide" onClick={()=>setSlide(s=>Math.max(0,s-1))} disabled={slide===0}
+            className="w-11 h-11 rounded-full border-2 border-emerald-400 bg-white text-emerald-700 flex items-center justify-center shadow-sm hover:bg-emerald-50 hover:scale-110 active:scale-90 disabled:opacity-30 disabled:hover:scale-100 transition-all"><ChL size={22} strokeWidth={2.5}/></button>
+          <span className="font-mono text-sm font-semibold text-slate-600 min-w-[64px] text-center">{slide+1} / {TOTAL_SLIDES}</span>
+          <button type="button" aria-label="Next slide" onClick={()=>setSlide(s=>Math.min(TOTAL_SLIDES-1,s+1))} disabled={slide===TOTAL_SLIDES-1}
+            className="w-11 h-11 rounded-full border-2 border-emerald-400 bg-white text-emerald-700 flex items-center justify-center shadow-sm hover:bg-emerald-50 hover:scale-110 active:scale-90 disabled:opacity-30 disabled:hover:scale-100 transition-all"><ChR size={22} strokeWidth={2.5}/></button>
         </div>
+        <span className="w-[110px]"/>
       </footer>
       <TeamsPanel open={panelOpen} onClose={()=>setPanelOpen(false)} teams={teams} setTeams={setTeams}/>
       <RevealModal data={revealModal} teams={teams} aId={aId} bId={bId} onAward={handleAward} onSkip={handleSkip}/>
