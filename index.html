@@ -688,7 +688,7 @@ function ResultsSlide({teams}){
   const dots=[["top-0 left-1/2 -translate-x-1/2","bg-sky-400"],["right-0 top-1/2 -translate-y-1/2","bg-cyan-400"],["bottom-0 left-1/2 -translate-x-1/2","bg-emerald-400"],["left-0 top-1/2 -translate-y-1/2","bg-sky-300"]];
   const names=winners.map(w=>w.name).join(" & ");
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-6 py-6 text-center">
+    <div className="flex-1 min-h-0 relative overflow-hidden flex flex-col items-center justify-center px-6 py-6 text-center">
       <div className="relative flex items-center justify-center w-64 h-64 md:w-80 md:h-80 mb-8">
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none"><div className="rays spin-rev rounded-full w-[620px] h-[620px] opacity-80"/></div>
         <div className="ripple absolute inset-0 rounded-full border-2 border-emerald-300"/>
@@ -868,10 +868,13 @@ function App(){
           <EnvelopeScene canSkip={skipCandidates.length>0} onSkip={skipQuestion} onOpen={()=>markOpened(qIndex)}/>
         )}
         {showQuestion && (
-          <div className="flex-1 flex flex-col items-center px-6 py-4 max-w-[1320px] mx-auto w-full min-h-[640px]">
-            <div className="enter w-full flex items-start justify-between mb-3 shrink-0">
-              <span className="text-sky-500 text-sm font-bold tracking-widest">QUESTION {slide}</span>
-              <div className="flex flex-col items-end gap-2">
+          <div className="flex-1 flex flex-col items-center px-6 py-3 max-w-[1320px] mx-auto w-full">
+            <div className="enter w-full flex items-start justify-between gap-6 mb-4 shrink-0">
+              <div className="flex-1 min-w-0">
+                <span className="text-sky-500 text-sm font-bold tracking-widest block mb-1">QUESTION {slide}</span>
+                <h3 className="font-head text-2xl md:text-3xl font-bold text-emerald-900 text-left leading-snug">{QUESTIONS[qIndex].prompt}</h3>
+              </div>
+              <div className="shrink-0 flex flex-col items-end gap-2">
                 <button onClick={()=>resetQuestion(qIndex)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass border border-slate-100 text-slate-600 text-xs font-bold shadow-sm hover:scale-105 active:scale-95 transition-transform">
                   <Undo size={13}/> Hide answers
                 </button>
@@ -880,7 +883,6 @@ function App(){
                 </button>
               </div>
             </div>
-            <h3 className="enter font-head text-2xl md:text-3xl font-bold text-emerald-900 text-left w-full mb-5 shrink-0" style={{animationDelay:"100ms"}}>{QUESTIONS[qIndex].prompt}</h3>
             <div className="tile-grid gap-5 w-full flex-1 min-h-0">
               {QUESTIONS[qIndex].answers.map(([text,points],i)=>(
                 <AnswerTile key={i} index={i} text={text} points={points*multiplier} revealed={!!revealed[qIndex][i]}
